@@ -6,10 +6,10 @@ import (
 	"log"
 	"net/url"
 	"os"
-	"os/exec"
 	"text/template"
 
 	"github.com/codegangsta/cli"
+	"github.com/skratchdot/open-golang/open"
 )
 
 func init() {
@@ -76,9 +76,9 @@ func doMain(c *cli.Context) {
 	q := url.Values{}
 	q.Set("status", "@tomo_e "+message)
 
-	cmd := exec.Command("sh", "-c", "open https://twitter.com/intent/tweet?"+q.Encode())
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+	err = open.Run("https://twitter.com/intent/tweet?" + q.Encode())
 
-	cmd.Run()
+	if err != nil {
+		log.Fatal(err)
+	}
 }
